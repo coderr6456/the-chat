@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chat Room</title>
+<style>
+body {
+font-family: Arial, sans-serif;
+margin: 0;
+display: flex;
+justify-content: center;
+align-items: center;
+height: 100vh;
+background-color: #f0f0f0;
+}
+.chat-container {
+width: 100%; /* Full width */
+max-width: 600px; /* Max width for readability */
+background-color: white;
+border: 1px solid #ccc;
+border-radius: 5px;
+padding: 20px;
+box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+display: flex;
+flex-direction: column;
+justify-content: space-between;
+height: 90vh; /* 90% of viewport height */
+overflow: hidden;
+}
+.chat-messages {
+flex: 1; /* Fill remaining space */
+overflow-y: scroll;
+margin-bottom: 10px;
+padding: 10px;
+border: 1px solid #ccc;
+border-radius: 5px;
+}
+.message {
+margin-bottom: 10px;
+}
+.message span {
+font-weight: bold;
+color: #333;
+}
+.message p {
+margin: 5px 0 0;
+}
+.input-container {
+display: flex;
+}
+.input-container input[type="text"] {
+flex: 1;
+padding: 8px;
+border: 1px solid #ccc;
+border-radius: 5px;
+font-size: 14px;
+}
+.input-container input[type="submit"] {
+background-color: black;
+color: white;
+border: none;
+padding: 8px 20px;
+border-radius: 5px;
+cursor: pointer;
+margin-left: 10px;
+font-size: 14px;
+}
+.alert-box {
+position: fixed;
+top: 20px;
+left: calc(50% - 150px); /* Center horizontally */
+background-color: #ffcccb; /* Light red */
+padding: 10px;
+border: 1px solid #f77;
+border-radius: 5px;
+box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+display: none;
+z-index: 1000; /* Ensure it's on top */
+}
+</style>
+</head>
+<body>
+<div class="chat-container">
+<div class="chat-messages" id="chatMessages">
+<!-- Chat messages will be displayed here -->
+</div>
+<form id="messageForm" onsubmit="sendMessage(event)">
+<div class="input-container">
+<input type="text" id="messageInput" placeholder="Type your message..." required>
+<input type="submit" value="Send">
+</div>
+</form>
+</div>
+
+<div class="alert-box" id="alertBox"></div>
+
+<script>
+function sendMessage(event) {
+event.preventDefault();
+
+// Get username (mocked for demonstration)
+let username = "Guest"; // Replace with actual username if available
+
+// Get message text from input
+let messageInput = document.getElementById('messageInput');
+let messageText = messageInput.value.trim();
+
+if (messageText !== '') {
+// Check for bad words (mocked for demonstration)
+let badWords = ['bad', 'words', 'here'];
+
+if (containsBadWords(messageText, badWords)) {
+displayAlert('This message contains inappropriate content.');
+} else {
+// Create message element
+let messageElement = document.createElement('div');
+messageElement.classList.add('message');
+messageElement.innerHTML = `<span>${username}:</span><p>${messageText}</p>`;
+
+// Append message to chat messages container
+let chatMessages = document.getElementById('chatMessages');
+chatMessages.appendChild(messageElement);
+
+// Scroll to bottom of chat messages
+chatMessages.scrollTop = chatMessages.scrollHeight;
+
+// Clear input
+messageInput.value = '';
+}
+}
+}
+
+function containsBadWords(message, badWords) {
+let messageLower = message.toLowerCase();
+for (let word of badWords) {
+if (messageLower.includes(word)) {
+return true;
+}
+}
+return false;
+}
+
+function displayAlert(message) {
+let alertBox = document.getElementById('alertBox');
+alertBox.textContent = message;
+alertBox.style.display = 'block';
+
+// Hide alert after 3 seconds
+setTimeout(function() {
+alertBox.style.display = 'none';
+}, 3000);
+}
+</script>
+</body>
+</html>
